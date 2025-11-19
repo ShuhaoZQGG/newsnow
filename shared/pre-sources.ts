@@ -21,17 +21,17 @@ export const originSources = {
     type: "hottest",
     interval: Time.Common,
     home: "https://twitter.com",
-    desc: "Temporarily disabled - Nitter instances unavailable",
-    disable: false,
+    desc: "Temporarily disabled - API cost too high",
+    disable: true,
     sub: {
       trending: {
         title: "Trending",
         type: "hottest",
       },
-      explore: {
-        title: "Explore",
-        type: "hottest",
-      },
+      // explore: {
+      //   title: "Explore",
+      //   type: "hottest",
+      // },
     },
   },
   "reddit": {

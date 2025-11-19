@@ -1,38 +1,4 @@
 {
-  "twitter": {
-    "redirect": "twitter-trending",
-    "name": "Twitter/X",
-    "type": "hottest",
-    "disable": false,
-    "desc": "Temporarily disabled - Nitter instances unavailable",
-    "column": "world",
-    "home": "https://twitter.com",
-    "color": "blue",
-    "interval": 1800000,
-    "title": "Trending"
-  },
-  "twitter-trending": {
-    "name": "Twitter/X",
-    "type": "hottest",
-    "disable": false,
-    "desc": "Temporarily disabled - Nitter instances unavailable",
-    "column": "world",
-    "home": "https://twitter.com",
-    "color": "blue",
-    "interval": 1800000,
-    "title": "Trending"
-  },
-  "twitter-explore": {
-    "name": "Twitter/X",
-    "type": "hottest",
-    "disable": false,
-    "desc": "Temporarily disabled - Nitter instances unavailable",
-    "column": "world",
-    "home": "https://twitter.com",
-    "color": "blue",
-    "interval": 1800000,
-    "title": "Explore"
-  },
   "reddit": {
     "redirect": "reddit-popular",
     "name": "Reddit",
