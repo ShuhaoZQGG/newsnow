@@ -77,6 +77,12 @@ export interface Source {
    */
   disable?: boolean | "cf"
   redirect?: SourceID
+  /**
+   * Disable automatic translation for this source
+   * Useful for sources that are already in English or contain code/technical terms
+   * @default false
+   */
+  disableTranslation?: boolean
 }
 
 export interface Column {

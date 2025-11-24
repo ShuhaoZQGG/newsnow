@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "NewsNow",
+    "description": "Echtzeit-Nachrichtenaggregationsplattform"
+  },
+  "common": {
+    "loading": "Wird geladen...",
+    "error": "Fehler",
+    "retry": "Erneut versuchen",
+    "close": "Schließen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "search": "Suchen",
+    "clear": "Löschen"
+  },
+  "search": {
+    "placeholder": "Suche was du möchtest",
+    "noResults": "Keine Ergebnisse gefunden, Sie können ein Problem auf Github einreichen",
+    "searching": "Suche läuft..."
+  },
+  "auth": {
+    "login": "Mit GitHub anmelden",
+    "logout": "Abmelden",
+    "loginSuccess": "Anmeldung erfolgreich",
+    "loginFailed": "Anmeldung fehlgeschlagen",
+    "notLoggedIn": "Nicht angemeldet"
+  },
+  "columns": {
+    "focus": "Fokus",
+    "hottest": "Am beliebtesten",
+    "realtime": "Echtzeit",
+    "china": "National",
+    "world": "International",
+    "tech": "Technologie",
+    "finance": "Finanzen"
+  },
+  "time": {
+    "justNow": "Gerade eben",
+    "minutesAgo": "Vor {{count}} Minute",
+    "minutesAgo_other": "Vor {{count}} Minuten",
+    "hoursAgo": "Vor {{count}} Stunde",
+    "hoursAgo_other": "Vor {{count}} Stunden",
+    "daysAgo": "Vor {{count}} Tag",
+    "daysAgo_other": "Vor {{count}} Tagen",
+    "monthDay": "{{day}}.{{month}}"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "theme": "Thema",
+    "translateContent": "Nachrichteninhalt übersetzen",
+    "autoDetect": "Quellsprache automatisch erkennen"
+  },
+  "menu": {
+    "github": "GitHub",
+    "settings": "Einstellungen",
+    "about": "Über"
+  },
+  "translation": {
+    "translating": "Übersetzen...",
+    "translationFailed": "Übersetzung fehlgeschlagen",
+    "showOriginal": "Original anzeigen",
+    "showTranslation": "Übersetzung anzeigen"
+  },
+  "status": {
+    "updated": "{{time}} aktualisiert",
+    "fetchFailed": "Abruf fehlgeschlagen"
+  }
+}

@@ -41,6 +41,7 @@ export const originSources = {
     type: "hottest",
     interval: Time.Fast,
     home: "https://www.reddit.com",
+    disableTranslation: true,
     sub: {
       popular: {
         title: "Popular",
@@ -68,6 +69,7 @@ export const originSources = {
     type: "hottest",
     interval: Time.Fast,
     home: "https://www.youtube.com",
+    disableTranslation: true,
     sub: {
       trending: {
         title: "Trending",
@@ -89,6 +91,7 @@ export const originSources = {
     column: "tech",
     type: "hottest",
     home: "https://news.ycombinator.com/",
+    disableTranslation: true,
   },
   "producthunt": {
     name: "Product Hunt",
@@ -98,12 +101,14 @@ export const originSources = {
     home: "https://www.producthunt.com/",
     desc: "Requires API token",
     disable: false,
+    disableTranslation: true,
   },
   "github": {
     name: "Github",
     color: "gray",
     home: "https://github.com/",
     column: "tech",
+    disableTranslation: true,
     sub: {
       "trending-today": {
         title: "Today",
@@ -118,6 +123,7 @@ export const originSources = {
     color: "blue",
     type: "hottest",
     home: "https://store.steampowered.com",
+    disableTranslation: true,
   },
   "solidot": {
     name: "Solidot",
@@ -535,6 +541,7 @@ export function genSources() {
       home: source.home,
       color: source.color ?? "primary",
       interval: source.interval ?? Time.Default,
+      disableTranslation: source.disableTranslation,
     }
     if (source.sub && Object.keys(source.sub).length) {
       Object.entries(source.sub).forEach(([subId, subSource], i) => {

@@ -10,6 +10,8 @@ import { GlobalOverlayScrollbar } from "~/components/common/overlay-scrollbar"
 import { Footer } from "~/components/footer"
 import { Toast } from "~/components/common/toast"
 import { SearchBar } from "~/components/common/search-bar"
+import { TranslationModeToggle } from "~/components/common/translation-mode-toggle"
+import { TranslationProgress } from "~/components/common/translation-progress"
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
@@ -66,6 +68,8 @@ function RootComponent() {
       </GlobalOverlayScrollbar>
       <Toast />
       <SearchBar />
+      <TranslationModeToggle />
+      <TranslationProgress />
       {import.meta.env.DEV && (
         <>
           <ReactQueryDevtools buttonPosition="bottom-left" />

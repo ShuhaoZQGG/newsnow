@@ -3,7 +3,10 @@ import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion, useInView } from "framer-motion"
 import { useWindowSize } from "react-use"
 import { forwardRef, useImperativeHandle } from "react"
+import { useTranslation } from "react-i18next"
 import { OverlayScrollbar } from "../common/overlay-scrollbar"
+import { TranslatedText } from "../common/translated-text"
+import { useEagerTranslation } from "~/hooks/useEagerTranslation"
 import { safeParseString } from "~/utils"
 
 export interface ItemsProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -163,7 +166,7 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
         defer
       >
         <div className={$("transition-opacity-500", isFetching && "op-20")}>
-          {!!data?.items?.length && (sources[id].type === "hottest" ? <NewsListHot items={data.items} /> : <NewsListTimeLine items={data.items} />)}
+          {!!data?.items?.length && (sources[id].type === "hottest" ? <NewsListHot items={data.items} id={id} /> : <NewsListTimeLine items={data.items} id={id} />)}
         </div>
       </OverlayScrollbar>
     </>
@@ -171,10 +174,11 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
 }
 
 function UpdatedTime({ isError, updatedTime }: { updatedTime: any, isError: boolean }) {
+  const { t } = useTranslation()
   const relativeTime = useRelativeTime(updatedTime ?? "")
-  if (relativeTime) return `${relativeTime}更新`
-  if (isError) return "获取失败"
-  return "加载中..."
+  if (relativeTime) return t("status.updated", { time: relativeTime })
+  if (isError) return t("status.fetchFailed")
+  return t("common.loading")
 }
 
 function DiffNumber({ diff }: { diff: number }) {
@@ -225,8 +229,10 @@ function NewsUpdatedTime({ date }: { date: string | number }) {
   const relativeTime = useRelativeTime(date)
   return <>{relativeTime}</>
 }
-function NewsListHot({ items }: { items: NewsItem[] }) {
+function NewsListHot({ items, id }: { items: NewsItem[], id: SourceID }) {
   const { width } = useWindowSize()
+  const { translations } = useEagerTranslation(items, id)
+
   return (
     <ol className="flex flex-col gap-2">
       {items?.map((item, i) => (
@@ -245,9 +251,12 @@ function NewsListHot({ items }: { items: NewsItem[] }) {
           </span>
           {!!item.extra?.diff && <DiffNumber diff={item.extra.diff} />}
           <span className="self-start line-height-none">
-            <span className="mr-2 text-base">
-              {item.title}
-            </span>
+            <TranslatedText
+              text={item.title}
+              className="mr-2 text-base"
+              preTranslated={translations.get(item.title)}
+              sourceId={id}
+            />
             <span className="text-xs text-neutral-400/80 truncate align-middle">
               <ExtraInfo item={item} />
             </span>
@@ -258,8 +267,10 @@ function NewsListHot({ items }: { items: NewsItem[] }) {
   )
 }
 
-function NewsListTimeLine({ items }: { items: NewsItem[] }) {
+function NewsListTimeLine({ items, id }: { items: NewsItem[], id: SourceID }) {
   const { width } = useWindowSize()
+  const { translations } = useEagerTranslation(items, id)
+
   return (
     <ol className="border-s border-neutral-400/50 flex flex-col ml-1">
       {items?.map(item => (
@@ -283,7 +294,11 @@ function NewsListTimeLine({ items }: { items: NewsItem[] }) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {item.title}
+            <TranslatedText
+              text={item.title}
+              preTranslated={translations.get(item.title)}
+              sourceId={id}
+            />
           </a>
         </li>
       ))}

@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "NewsNow",
+    "description": "Real-time news aggregation platform"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "search": "Search",
+    "clear": "Clear"
+  },
+  "search": {
+    "placeholder": "Search what you want",
+    "noResults": "No results found, you can go to Github to submit an issue",
+    "searching": "Searching..."
+  },
+  "auth": {
+    "login": "Login with GitHub",
+    "logout": "Logout",
+    "loginSuccess": "Login successful",
+    "loginFailed": "Login failed",
+    "notLoggedIn": "Not logged in"
+  },
+  "columns": {
+    "focus": "Focus",
+    "hottest": "Hottest",
+    "realtime": "Real-time",
+    "china": "Domestic",
+    "world": "International",
+    "tech": "Technology",
+    "finance": "Finance"
+  },
+  "time": {
+    "justNow": "Just now",
+    "minutesAgo": "{{count}} minute ago",
+    "minutesAgo_other": "{{count}} minutes ago",
+    "hoursAgo": "{{count}} hour ago",
+    "hoursAgo_other": "{{count}} hours ago",
+    "daysAgo": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago",
+    "monthDay": "{{month}}/{{day}}"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "translateContent": "Translate news content",
+    "autoDetect": "Auto-detect source language"
+  },
+  "menu": {
+    "github": "GitHub",
+    "settings": "Settings",
+    "about": "About"
+  },
+  "translation": {
+    "translating": "Translating...",
+    "translationFailed": "Translation failed",
+    "showOriginal": "Show original",
+    "showTranslation": "Show translation"
+  },
+  "status": {
+    "updated": "{{time}} updated",
+    "fetchFailed": "Fetch failed"
+  }
+}

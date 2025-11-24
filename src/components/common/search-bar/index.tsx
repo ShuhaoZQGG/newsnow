@@ -1,5 +1,6 @@
 import { Command } from "cmdk"
 import { useMount } from "react-use"
+import { useTranslation } from "react-i18next"
 import type { SourceID } from "@shared/types"
 import { useMemo, useRef, useState } from "react"
 import pinyin from "@shared/pinyin.json"
@@ -37,6 +38,7 @@ function groupByColumn(items: SourceItemProps[]) {
 }
 
 export function SearchBar() {
+  const { t } = useTranslation()
   const { opened, toggle } = useSearchBar()
   const sourceItems = useMemo(
     () =>
@@ -83,12 +85,12 @@ export function SearchBar() {
       <Command.Input
         ref={inputRef}
         autoFocus
-        placeholder="搜索你想要的"
+        placeholder={t("search.placeholder")}
       />
       <div className="md:flex pt-2">
         <OverlayScrollbar defer className="overflow-y-auto md:min-w-275px">
           <Command.List>
-            <Command.Empty> 没有找到，可以前往 Github 提 issue </Command.Empty>
+            <Command.Empty>{t("search.noResults")}</Command.Empty>
             {
               sourceItems.map(({ column, sources }) => (
                 <Command.Group heading={column} key={column}>

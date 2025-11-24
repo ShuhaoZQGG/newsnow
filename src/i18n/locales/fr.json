@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "NewsNow",
+    "description": "Plateforme d'agrégation de nouvelles en temps réel"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "retry": "Réessayer",
+    "close": "Fermer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "search": "Rechercher",
+    "clear": "Effacer"
+  },
+  "search": {
+    "placeholder": "Recherchez ce que vous voulez",
+    "noResults": "Aucun résultat trouvé, vous pouvez soumettre un problème sur Github",
+    "searching": "Recherche en cours..."
+  },
+  "auth": {
+    "login": "Se connecter avec GitHub",
+    "logout": "Se déconnecter",
+    "loginSuccess": "Connexion réussie",
+    "loginFailed": "Échec de la connexion",
+    "notLoggedIn": "Non connecté"
+  },
+  "columns": {
+    "focus": "Focus",
+    "hottest": "Plus populaire",
+    "realtime": "En temps réel",
+    "china": "National",
+    "world": "International",
+    "tech": "Technologie",
+    "finance": "Finance"
+  },
+  "time": {
+    "justNow": "À l'instant",
+    "minutesAgo": "Il y a {{count}} minute",
+    "minutesAgo_other": "Il y a {{count}} minutes",
+    "hoursAgo": "Il y a {{count}} heure",
+    "hoursAgo_other": "Il y a {{count}} heures",
+    "daysAgo": "Il y a {{count}} jour",
+    "daysAgo_other": "Il y a {{count}} jours",
+    "monthDay": "{{day}}/{{month}}"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "theme": "Thème",
+    "translateContent": "Traduire le contenu des nouvelles",
+    "autoDetect": "Détecter automatiquement la langue source"
+  },
+  "menu": {
+    "github": "GitHub",
+    "settings": "Paramètres",
+    "about": "À propos"
+  },
+  "translation": {
+    "translating": "Traduction...",
+    "translationFailed": "Échec de la traduction",
+    "showOriginal": "Afficher l'original",
+    "showTranslation": "Afficher la traduction"
+  },
+  "status": {
+    "updated": "Mis à jour {{time}}",
+    "fetchFailed": "Échec de récupération"
+  }
+}
