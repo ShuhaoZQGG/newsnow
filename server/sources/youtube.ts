@@ -1,118 +1,112 @@
 /**
  * YouTube source implementation
  *
- * Uses RSSHub as primary method for trending videos
- * Falls back gracefully if RSSHub is unavailable
+ * Uses YouTube Data API v3 for trending videos
+ * Free tier: 10,000 units/day, videos.list costs only 1 unit per request
+ * Set YOUTUBE_API_KEY environment variable to enable
+ *
+ * If no API key is set, the source will be disabled with a helpful error message
  */
 
+import process from "node:process"
+
+interface YouTubeVideo {
+  id: string
+  snippet: {
+    publishedAt: string
+    channelId: string
+    title: string
+    description: string
+    channelTitle: string
+  }
+}
+
+interface YouTubeAPIResponse {
+  items: YouTubeVideo[]
+}
+
+// Map category names to YouTube video category IDs
+const CATEGORY_IDS: Record<string, string> = {
+  gaming: "20",
+  music: "10",
+  movies: "30",
+}
+
+async function fetchFromYouTubeAPI(categoryId?: string, region: string = "US"): Promise<any[]> {
+  const apiKey = process.env.YOUTUBE_API_KEY
+
+  if (!apiKey) {
+    throw new Error(
+      "YouTube API key not configured. Please set YOUTUBE_API_KEY environment variable. "
+      + "Get a free API key from https://console.cloud.google.com/apis/credentials (10,000 units/day free tier)",
+    )
+  }
+
+  try {
+    const url = "https://www.googleapis.com/youtube/v3/videos"
+    const params = new URLSearchParams({
+      part: "snippet",
+      chart: "mostPopular",
+      regionCode: region,
+      maxResults: "50",
+      key: apiKey,
+    })
+
+    if (categoryId) {
+      params.append("videoCategoryId", categoryId)
+    }
+
+    const response = await $fetch<YouTubeAPIResponse>(`${url}?${params.toString()}`, {
+      timeout: 10000,
+    })
+
+    if (!response?.items || response.items.length === 0) {
+      throw new Error("No videos returned from YouTube API")
+    }
+
+    return response.items.slice(0, 30).map(video => ({
+      id: `https://www.youtube.com/watch?v=${video.id}`,
+      title: video.snippet.title,
+      url: `https://www.youtube.com/watch?v=${video.id}`,
+      pubDate: video.snippet.publishedAt,
+      extra: {
+        info: video.snippet.channelTitle,
+        hover: video.snippet.description ? video.snippet.description.slice(0, 200) : undefined,
+      },
+    }))
+  } catch (error: any) {
+    if (error?.statusCode === 403) {
+      throw new Error(
+        "YouTube API quota exceeded or invalid API key. "
+        + "Check your API key and quota at https://console.cloud.google.com/apis/api/youtube.googleapis.com/quotas",
+      )
+    }
+    throw error
+  }
+}
+
 const trending = defineSource(async () => {
-  // Try multiple RSSHub instances for reliability
-  const rssHubInstances = [
-    "https://rsshub.app",
-    "https://rsshub.rssforever.com",
-  ]
-
-  let lastError: Error | null = null
-
-  for (const rssHubBase of rssHubInstances) {
-    try {
-      const rssUrl = `${rssHubBase}/youtube/trending`
-      const data = await rss2json(rssUrl)
-
-      if (!data?.items || data.items.length === 0) {
-        throw new Error("No items returned from RSSHub")
-      }
-
-      return data.items.slice(0, 30).map((item, index) => ({
-        id: item.link || `youtube-${index}`,
-        title: item.title || "Untitled",
-        url: item.link || "https://youtube.com",
-        pubDate: item.created,
-        extra: {
-          info: item.author || undefined,
-          hover: item.description ? item.description.replace(/<[^>]*>/g, "").slice(0, 200) : undefined,
-        },
-      }))
-    } catch (error) {
-      lastError = error as Error
-      console.warn(`Failed to fetch from ${rssHubBase}:`, error)
-      continue
-    }
-  }
-
-  // If all instances failed
-  throw new Error(`Unable to fetch YouTube trending. All RSSHub instances failed. Last error: ${lastError?.message || "Unknown"}`)
+  return fetchFromYouTubeAPI()
 })
 
-// Popular channels or categories
+// Gaming category trending videos
 const gaming = defineSource(async () => {
-  const rssHubInstances = [
-    "https://rsshub.app",
-    "https://rsshub.rssforever.com",
-  ]
-
-  for (const rssHubBase of rssHubInstances) {
-    try {
-      const rssUrl = `${rssHubBase}/youtube/trending/gaming`
-      const data = await rss2json(rssUrl)
-
-      if (!data?.items || data.items.length === 0) {
-        throw new Error("No gaming items returned")
-      }
-
-      return data.items.slice(0, 30).map((item, index) => ({
-        id: item.link || `youtube-gaming-${index}`,
-        title: item.title || "Untitled",
-        url: item.link || "https://youtube.com",
-        pubDate: item.created,
-        extra: {
-          info: item.author || undefined,
-        },
-      }))
-    } catch (error) {
-      console.warn(`YouTube gaming failed from ${rssHubBase}:`, error)
-      continue
-    }
+  try {
+    return await fetchFromYouTubeAPI(CATEGORY_IDS.gaming)
+  } catch (error) {
+    console.warn("YouTube gaming failed, falling back to trending:", error)
+    return trending()
   }
-
-  // Fallback to main trending if all gaming attempts fail
-  console.warn("All YouTube gaming sources failed, falling back to trending")
-  return trending()
 })
 
+// Music category trending videos
 const music = defineSource(async () => {
-  const rssHubInstances = [
-    "https://rsshub.app",
-    "https://rsshub.rssforever.com",
-  ]
-
-  for (const rssHubBase of rssHubInstances) {
-    try {
-      const rssUrl = `${rssHubBase}/youtube/trending/music`
-      const data = await rss2json(rssUrl)
-
-      if (!data?.items || data.items.length === 0) {
-        throw new Error("No music items returned")
-      }
-
-      return data.items.slice(0, 30).map((item, index) => ({
-        id: item.link || `youtube-music-${index}`,
-        title: item.title || "Untitled",
-        url: item.link || "https://youtube.com",
-        pubDate: item.created,
-        extra: {
-          info: item.author || undefined,
-        },
-      }))
-    } catch (error) {
-      console.warn(`YouTube music failed from ${rssHubBase}:`, error)
-      continue
-    }
+  try {
+    return await fetchFromYouTubeAPI(CATEGORY_IDS.music)
+  } catch (error) {
+    console.warn("YouTube music failed, falling back to trending:", error)
+    return trending()
   }
-
-  // Fallback to main trending if all music attempts fail
-  console.warn("All YouTube music sources failed, falling back to trending")
-  return trending()
 })
 
 export default defineSource({
