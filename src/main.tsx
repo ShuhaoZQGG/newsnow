@@ -3,6 +3,11 @@ import { RouterProvider, createRouter } from "@tanstack/react-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { routeTree } from "./routeTree.gen"
 import "./i18n" // Initialize i18n
+import { initializeTranslationService } from "./utils/translate"
+
+// Initialize translation service early, before components mount
+// This performs an early health check and sets up periodic retries
+initializeTranslationService()
 
 const queryClient = new QueryClient()
 

@@ -28,8 +28,11 @@ interface ApiHealthCheck {
 }
 
 let apiHealthCheck: ApiHealthCheck | null = null
-const HEALTH_CHECK_TTL = 5 * 60 * 1000 // 5 minutes
+const HEALTH_CHECK_TTL = 30 * 60 * 1000 // 30 minutes
 const HEALTH_CHECK_TIMEOUT = 3000 // 3 seconds timeout for health check
+
+// Flag to prevent concurrent health checks
+let healthCheckInProgress: Promise<boolean> | null = null
 
 /**
  * Supported languages with their ISO 639-1 codes
@@ -54,6 +57,7 @@ function getCacheKey(text: string, targetLang: string, sourceLang?: string): str
 /**
  * Check if the LibreTranslate API is available
  * Uses a cached result to avoid repeated checks
+ * Prevents concurrent health checks by reusing an in-progress check
  */
 async function checkApiAvailability(): Promise<boolean> {
   const now = Date.now()
@@ -63,37 +67,49 @@ async function checkApiAvailability(): Promise<boolean> {
     return apiHealthCheck.isAvailable
   }
 
-  // Perform health check
-  try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), HEALTH_CHECK_TIMEOUT)
-
-    // Try to fetch the languages endpoint as a health check
-    // This is a lightweight endpoint that doesn't require authentication
-    const response = await fetch(`${LIBRETRANSLATE_API}/languages`, {
-      method: "GET",
-      signal: controller.signal,
-    })
-
-    clearTimeout(timeoutId)
-
-    const isAvailable = response.ok
-
-    // Cache the result
-    apiHealthCheck = {
-      isAvailable,
-      lastChecked: now,
-    }
-
-    return isAvailable
-  } catch {
-    // API is not available
-    apiHealthCheck = {
-      isAvailable: false,
-      lastChecked: now,
-    }
-    return false
+  // If a health check is already in progress, wait for it
+  if (healthCheckInProgress) {
+    return healthCheckInProgress
   }
+
+  // Perform health check
+  healthCheckInProgress = (async () => {
+    try {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), HEALTH_CHECK_TIMEOUT)
+
+      // Try to fetch the languages endpoint as a health check
+      // This is a lightweight endpoint that doesn't require authentication
+      const response = await fetch(`${LIBRETRANSLATE_API}/languages`, {
+        method: "GET",
+        signal: controller.signal,
+      })
+
+      clearTimeout(timeoutId)
+
+      const isAvailable = response.ok
+
+      // Cache the result
+      apiHealthCheck = {
+        isAvailable,
+        lastChecked: now,
+      }
+
+      return isAvailable
+    } catch {
+      // API is not available
+      apiHealthCheck = {
+        isAvailable: false,
+        lastChecked: now,
+      }
+      return false
+    } finally {
+      // Clear the in-progress flag
+      healthCheckInProgress = null
+    }
+  })()
+
+  return healthCheckInProgress
 }
 
 /**
@@ -233,4 +249,27 @@ export function getTranslationCacheSize(): number {
  */
 export function resetApiHealthCheck(): void {
   apiHealthCheck = null
+  healthCheckInProgress = null
+}
+
+/**
+ * Initialize translation service with early health check
+ * Should be called early in the app lifecycle, before components mount
+ * Sets up periodic retry every 30 minutes
+ */
+export function initializeTranslationService(): void {
+  // Perform initial health check immediately
+  checkApiAvailability().catch(() => {
+    // Silently handle errors - the check will be retried periodically
+  })
+
+  // Set up periodic retry every 30 minutes
+  setInterval(() => {
+    // Reset the cache to force a new check
+    resetApiHealthCheck()
+    // Perform the check
+    checkApiAvailability().catch(() => {
+      // Silently handle errors
+    })
+  }, HEALTH_CHECK_TTL)
 }
