@@ -1,3 +1,4 @@
+export * from "./client"
 export * from "./consts"
 export * from "./dir"
 export * from "./metadata"

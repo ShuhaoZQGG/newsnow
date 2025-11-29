@@ -32,7 +32,7 @@ const nitroOption: Parameters<typeof viteNitro>[0] = {
 }
 
 if (process.env.VERCEL) {
-  nitroOption.preset = "vercel-edge"
+  nitroOption.preset = "vercel"
   // You can use other online database, do it yourself. For more info: https://db0.unjs.io/connectors
   nitroOption.database = undefined
   // nitroOption.vercel = {

@@ -24,6 +24,10 @@
     "pre-commit": "pnpm -r exec lint-staged"
   },
   "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    },
     "patchedDependencies": {
       "dayjs": "apps/web/patches/dayjs.patch"
     },
@@ -44,10 +48,17 @@
     "dayjs": "1.11.13",
     "nitropack": "npm:nitro-go@0.0.3",
     "picomatch": "^4.0.2",
-    "react": "^19",
     "db0": "^0.3.1",
     "vite": "^6",
     "h3": "^1.15.1",
-    "h3-nightly": "npm:h3@^1.15.1"
+    "h3-nightly": "npm:h3@^1.15.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    }
   }
 }

@@ -1,0 +1,77 @@
+{
+  "app": {
+    "title": "热点 Now",
+    "description": "实时新闻聚合平台"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "retry": "重试",
+    "close": "关闭",
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "search": "搜索",
+    "clear": "清除"
+  },
+  "search": {
+    "placeholder": "搜索你想要的",
+    "noResults": "没有找到，可以前往 Github 提 issue",
+    "searching": "搜索中...",
+    "region": "地区",
+    "topic": "主题",
+    "allTopics": "全部主题"
+  },
+  "auth": {
+    "login": "Github 账号登录",
+    "logout": "退出登录",
+    "loginSuccess": "登录成功",
+    "loginFailed": "登录失败",
+    "notLoggedIn": "未登录"
+  },
+  "columns": {
+    "focus": "关注",
+    "hottest": "最热",
+    "realtime": "实时",
+    "china": "国内",
+    "world": "国际",
+    "tech": "科技",
+    "finance": "财经",
+    "uncategorized": "未分类"
+  },
+  "regions": {
+    "global": "全球",
+    "china": "中国"
+  },
+  "time": {
+    "justNow": "刚刚",
+    "minutesAgo": "{{count}}分钟前",
+    "hoursAgo": "{{count}}小时前",
+    "daysAgo": "{{count}}天前",
+    "monthDay": "{{month}}月{{day}}日"
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "theme": "主题",
+    "translateContent": "翻译新闻内容",
+    "autoDetect": "自动检测源语言",
+    "lightMode": "浅色模式",
+    "darkMode": "深色模式"
+  },
+  "menu": {
+    "github": "Github",
+    "settings": "设置",
+    "about": "关于"
+  },
+  "translation": {
+    "translating": "翻译中...",
+    "translationFailed": "翻译失败",
+    "showOriginal": "显示原文",
+    "showTranslation": "显示翻译"
+  },
+  "status": {
+    "updated": "{{time}}更新",
+    "fetchFailed": "获取失败"
+  }
+}
