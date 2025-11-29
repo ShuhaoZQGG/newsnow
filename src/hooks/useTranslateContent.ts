@@ -48,6 +48,7 @@ export function useTranslateContent(originalText: string, sourceId?: SourceID) {
     }
 
     // Translate the text
+    // Note: translateText never throws - it always returns a string (original or translated)
     const performTranslation = async () => {
       setIsTranslating(true)
       try {
@@ -57,9 +58,6 @@ export function useTranslateContent(originalText: string, sourceId?: SourceID) {
           sourceLang,
         })
         setTranslatedText(translated)
-      } catch (error) {
-        console.error("Translation error:", error)
-        setTranslatedText(originalText) // Fallback to original on error
       } finally {
         setIsTranslating(false)
       }

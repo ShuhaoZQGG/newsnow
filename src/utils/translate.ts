@@ -21,6 +21,16 @@ const translationCache: TranslationCache = {}
 const LIBRETRANSLATE_API = import.meta.env.VITE_LIBRETRANSLATE_API || "https://libretranslate.com"
 const LIBRETRANSLATE_KEY = import.meta.env.VITE_LIBRETRANSLATE_KEY || ""
 
+// API availability check cache
+interface ApiHealthCheck {
+  isAvailable: boolean
+  lastChecked: number
+}
+
+let apiHealthCheck: ApiHealthCheck | null = null
+const HEALTH_CHECK_TTL = 5 * 60 * 1000 // 5 minutes
+const HEALTH_CHECK_TIMEOUT = 3000 // 3 seconds timeout for health check
+
 /**
  * Supported languages with their ISO 639-1 codes
  */
@@ -39,6 +49,51 @@ export type SupportedLanguage = keyof typeof SUPPORTED_LANGUAGES
  */
 function getCacheKey(text: string, targetLang: string, sourceLang?: string): string {
   return `${sourceLang || "auto"}_${targetLang}_${text}`
+}
+
+/**
+ * Check if the LibreTranslate API is available
+ * Uses a cached result to avoid repeated checks
+ */
+async function checkApiAvailability(): Promise<boolean> {
+  const now = Date.now()
+
+  // Return cached result if still valid
+  if (apiHealthCheck && (now - apiHealthCheck.lastChecked) < HEALTH_CHECK_TTL) {
+    return apiHealthCheck.isAvailable
+  }
+
+  // Perform health check
+  try {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), HEALTH_CHECK_TIMEOUT)
+
+    // Try to fetch the languages endpoint as a health check
+    // This is a lightweight endpoint that doesn't require authentication
+    const response = await fetch(`${LIBRETRANSLATE_API}/languages`, {
+      method: "GET",
+      signal: controller.signal,
+    })
+
+    clearTimeout(timeoutId)
+
+    const isAvailable = response.ok
+
+    // Cache the result
+    apiHealthCheck = {
+      isAvailable,
+      lastChecked: now,
+    }
+
+    return isAvailable
+  } catch {
+    // API is not available
+    apiHealthCheck = {
+      isAvailable: false,
+      lastChecked: now,
+    }
+    return false
+  }
 }
 
 /**
@@ -94,6 +149,13 @@ export async function translateText(options: TranslationOptions): Promise<string
     return translationCache[cacheKey]
   }
 
+  // Pre-check: Verify API is available before making request
+  const isApiAvailable = await checkApiAvailability()
+  if (!isApiAvailable) {
+    // API is not available, return original text without making request
+    return text
+  }
+
   try {
     const params = new URLSearchParams({
       q: text,
@@ -126,7 +188,10 @@ export async function translateText(options: TranslationOptions): Promise<string
 
     return translatedText
   } catch {
-    return text // Return original text on error
+    // Silently handle errors - return original text
+    // Network errors are logged by the browser console automatically,
+    // but we don't want to propagate them further
+    return text
   }
 }
 
@@ -160,4 +225,12 @@ export function clearTranslationCache(): void {
  */
 export function getTranslationCacheSize(): number {
   return Object.keys(translationCache).length
+}
+
+/**
+ * Force a new API availability check
+ * Useful when you know the API status has changed
+ */
+export function resetApiHealthCheck(): void {
+  apiHealthCheck = null
 }
