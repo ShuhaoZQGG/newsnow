@@ -17,7 +17,10 @@
   "search": {
     "placeholder": "Search what you want",
     "noResults": "No results found, you can go to Github to submit an issue",
-    "searching": "Searching..."
+    "searching": "Searching...",
+    "region": "Region",
+    "topic": "Topic",
+    "allTopics": "All Topics"
   },
   "auth": {
     "login": "Login with GitHub",
@@ -33,7 +36,8 @@
     "china": "Domestic",
     "world": "International",
     "tech": "Technology",
-    "finance": "Finance"
+    "finance": "Finance",
+    "uncategorized": "Uncategorized"
   },
   "regions": {
     "global": "Global",

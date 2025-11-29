@@ -13,29 +13,27 @@ export const regions: Record<Region, { zh: string, en: string }> = {
   },
 } as const
 
+// Column IDs - translations are handled via i18n
 export const columns = {
-  china: {
-    zh: "国内",
-  },
-  world: {
-    zh: "国际",
-  },
-  tech: {
-    zh: "科技",
-  },
-  finance: {
-    zh: "财经",
-  },
-  focus: {
-    zh: "关注",
-  },
-  realtime: {
-    zh: "实时",
-  },
-  hottest: {
-    zh: "最热",
-  },
+  china: "china",
+  world: "world",
+  tech: "tech",
+  finance: "finance",
+  focus: "focus",
+  realtime: "realtime",
+  hottest: "hottest",
 } as const
+
+// Default English names for server-side usage (fallback)
+const columnDefaultNames: Record<keyof typeof columns, string> = {
+  china: "Domestic",
+  world: "International",
+  tech: "Technology",
+  finance: "Finance",
+  focus: "Focus",
+  realtime: "Real-time",
+  hottest: "Hottest",
+}
 
 export const fixedColumnIds = ["focus", "hottest"] as const satisfies Partial<ColumnID>[]
 export const regionColumnId = "realtime" as const satisfies ColumnID
@@ -43,26 +41,26 @@ export const regionColumnId = "realtime" as const satisfies ColumnID
 export const navigableColumnIds = [...fixedColumnIds, regionColumnId] as const
 export const hiddenColumns = Object.keys(columns).filter(id => !navigableColumnIds.includes(id as any)) as HiddenColumnID[]
 
-export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntries(columns).map(([k, v]) => {
+export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntries(columns).map(([k]) => {
   switch (k) {
     case "focus":
       return [k, {
-        name: v.zh,
+        name: columnDefaultNames[k],
         sources: [] as SourceID[],
       }]
     case "hottest":
       return [k, {
-        name: v.zh,
+        name: columnDefaultNames[k],
         sources: typeSafeObjectEntries(sources).filter(([, v]) => v.type === "hottest" && !v.redirect).map(([k]) => k),
       }]
     case "realtime":
       return [k, {
-        name: v.zh,
+        name: columnDefaultNames[k],
         sources: typeSafeObjectEntries(sources).filter(([, v]) => v.type === "realtime" && !v.redirect).map(([k]) => k),
       }]
     default:
       return [k, {
-        name: v.zh,
+        name: columnDefaultNames[k],
         sources: typeSafeObjectEntries(sources).filter(([, v]) => v.column === k && !v.redirect).map(([k]) => k),
       }]
   }

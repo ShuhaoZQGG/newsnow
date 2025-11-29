@@ -17,7 +17,10 @@
   "search": {
     "placeholder": "搜索你想要的",
     "noResults": "没有找到，可以前往 Github 提 issue",
-    "searching": "搜索中..."
+    "searching": "搜索中...",
+    "region": "地区",
+    "topic": "主题",
+    "allTopics": "全部主题"
   },
   "auth": {
     "login": "Github 账号登录",
@@ -33,7 +36,8 @@
     "china": "国内",
     "world": "国际",
     "tech": "科技",
-    "finance": "财经"
+    "finance": "财经",
+    "uncategorized": "未分类"
   },
   "regions": {
     "global": "全球",

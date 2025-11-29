@@ -5,7 +5,7 @@ import { useAtom } from "jotai"
 import type { Region, SourceID } from "@shared/types"
 import { useMemo, useRef, useState } from "react"
 import pinyin from "@shared/pinyin.json"
-import { columns, hiddenColumns, regions } from "@shared/metadata"
+import { hiddenColumns, regions } from "@shared/metadata"
 import { OverlayScrollbar } from "../overlay-scrollbar"
 import { CardWrapper } from "~/components/column/card"
 import { regionAtom } from "~/atoms"
@@ -17,7 +17,7 @@ interface SourceItemProps {
   id: SourceID
   name: string
   title?: string
-  column: any
+  column: string | null // Column ID or null for uncategorized
   pinyin: string
 }
 
@@ -28,16 +28,20 @@ function groupByColumn(items: SourceItemProps[]) {
     else acc.push({ column: item.column, sources: [item] })
     return acc
   }, [] as {
-    column: string
+    column: string | null
     sources: SourceItemProps[]
   }[]).sort((m, n) => {
-    if (m.column === "科技") return -1
-    if (n.column === "科技") return 1
+    // Sort by column ID, prioritizing tech, then uncategorized last
+    const mColumn = m.column || "uncategorized"
+    const nColumn = n.column || "uncategorized"
 
-    if (m.column === "未分类") return 1
-    if (n.column === "未分类") return -1
+    if (mColumn === "tech") return -1
+    if (nColumn === "tech") return 1
 
-    return m.column < n.column ? -1 : 1
+    if (mColumn === "uncategorized") return 1
+    if (nColumn === "uncategorized") return -1
+
+    return mColumn < nColumn ? -1 : 1
   })
 }
 
@@ -64,7 +68,7 @@ export function SearchBar() {
         .map(([k, source]) => ({
           id: k,
           title: source.title,
-          column: source.column ? columns[source.column].zh : "未分类",
+          column: source.column || null, // Store column ID or null for uncategorized
           name: source.name,
           pinyin: pinyin?.[k as keyof typeof pinyin] ?? "",
         })))
@@ -170,7 +174,10 @@ export function SearchBar() {
             <Command.Empty>{t("search.noResults")}</Command.Empty>
             {
               sourceItems.map(({ column, sources }) => (
-                <Command.Group heading={column} key={column}>
+                <Command.Group
+                  heading={column ? t(`columns.${column}`) : t("columns.uncategorized")}
+                  key={column || "uncategorized"}
+                >
                   {
                     sources.map(item => <SourceItem item={item} key={item.id} />)
                   }
