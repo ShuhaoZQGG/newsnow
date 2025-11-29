@@ -35,6 +35,10 @@
     "tech": "科技",
     "finance": "财经"
   },
+  "regions": {
+    "global": "全球",
+    "china": "中国"
+  },
   "time": {
     "justNow": "刚刚",
     "minutesAgo": "{{count}}分钟前",

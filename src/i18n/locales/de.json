@@ -35,6 +35,10 @@
     "tech": "Technologie",
     "finance": "Finanzen"
   },
+  "regions": {
+    "global": "Global",
+    "china": "China"
+  },
   "time": {
     "justNow": "Gerade eben",
     "minutesAgo": "Vor {{count}} Minute",

@@ -1,8 +1,12 @@
 import { regions } from "@shared/metadata"
 import type { Region } from "@shared/types"
+import { useTranslation } from "react-i18next"
+import { useState } from "react"
+import { useAtom } from "jotai"
 import { regionAtom } from "~/atoms"
 
 export function RegionSelector() {
+  const { t } = useTranslation()
   const [selectedRegion, setSelectedRegion] = useAtom(regionAtom)
   const [shown, setShown] = useState(false)
 
@@ -19,7 +23,7 @@ export function RegionSelector() {
           "op-70 dark:op-90 flex items-center gap-1",
         )}
       >
-        <span>{regions[selectedRegion].zh}</span>
+        <span>{t(`regions.${selectedRegion}`)}</span>
         <div className="i-ph:caret-down text-xs" />
       </button>
 
@@ -44,7 +48,7 @@ export function RegionSelector() {
                 )}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span>{regions[region].zh}</span>
+                  <span>{t(`regions.${region}`)}</span>
                   {selectedRegion === region && (
                     <div className="i-ph:check text-base" />
                   )}

@@ -558,7 +558,6 @@ export function genSources() {
         // Check if subSource has Chinese characters in title
         const subHasChinese = subSource.title && hasChineseCharacters(subSource.title)
         const subRegion = source.region ?? (subHasChinese ? "china" : defaultRegion)
-        console.log(subHasChinese, subRegion)
         if (i === 0) {
           _.push([
             id,

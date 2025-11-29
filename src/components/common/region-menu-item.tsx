@@ -1,5 +1,6 @@
 import { regions } from "@shared/metadata"
 import type { Region } from "@shared/types"
+import { useTranslation } from "react-i18next"
 import { useAtom } from "jotai"
 import { regionAtom } from "~/atoms"
 
@@ -8,6 +9,7 @@ import { regionAtom } from "~/atoms"
  * Displays a dropdown of supported regions in the settings menu
  */
 export function RegionMenuItem() {
+  const { t } = useTranslation()
   const [selectedRegion, setSelectedRegion] = useAtom(regionAtom)
 
   const regionEntries = Object.entries(regions) as [Region, typeof regions[Region]][]
@@ -20,14 +22,14 @@ export function RegionMenuItem() {
     <li className="relative group">
       <div className="flex items-center gap-2 cursor-pointer">
         <span className="i-ph:globe-duotone inline-block" />
-        <span>{regions[selectedRegion].zh}</span>
+        <span>{t(`regions.${selectedRegion}`)}</span>
         <span className="i-ph:caret-down inline-block text-xs" />
       </div>
 
       {/* Region dropdown */}
       <div className="absolute hidden group-hover:block left-0 top-full mt-1 w-150px bg-base bg-op-90! backdrop-blur-md rounded-lg shadow-lg z-100">
         <ul className="py-1">
-          {regionEntries.map(([code, region]) => (
+          {regionEntries.map(([code, _]) => (
             <li
               key={code}
               onClick={() => handleRegionChange(code)}
@@ -37,7 +39,7 @@ export function RegionMenuItem() {
               ])}
             >
               <span className="flex items-center gap-2">
-                <span>{region.zh}</span>
+                <span>{t(`regions.${code}`)}</span>
                 {selectedRegion === code && (
                   <span className="i-ph:check inline-block text-sm" />
                 )}

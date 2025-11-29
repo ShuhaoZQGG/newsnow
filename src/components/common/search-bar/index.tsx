@@ -114,7 +114,7 @@ export function SearchBar() {
                   : "hover:bg-primary/10 text-neutral-400",
               )}
             >
-              {regions[region].zh}
+              {t(`regions.${region}`)}
             </button>
           ))}
         </div>
