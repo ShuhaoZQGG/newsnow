@@ -1,13 +1,15 @@
 import { Command } from "cmdk"
 import { useMount } from "react-use"
 import { useTranslation } from "react-i18next"
+import { useAtom } from "jotai"
 import type { Region, SourceID } from "@shared/types"
 import { useMemo, useRef, useState } from "react"
 import pinyin from "@shared/pinyin.json"
-import { regions } from "@shared/metadata"
+import { columns, hiddenColumns, regions } from "@shared/metadata"
 import { OverlayScrollbar } from "../overlay-scrollbar"
 import { CardWrapper } from "~/components/column/card"
 import { regionAtom } from "~/atoms"
+import { topicAtom } from "~/atoms/topicAtom"
 
 import "./cmdk.css"
 
@@ -43,6 +45,7 @@ export function SearchBar() {
   const { t } = useTranslation()
   const { opened, toggle } = useSearchBar()
   const [selectedRegion, setSelectedRegion] = useAtom(regionAtom)
+  const [selectedTopic, setSelectedTopic] = useAtom(topicAtom)
 
   const sourceItems = useMemo(
     () =>
@@ -53,6 +56,11 @@ export function SearchBar() {
           const sourceRegion = source.region || "global"
           return sourceRegion === selectedRegion
         })
+        // Filter by selected topic
+        .filter(([_, source]) => {
+          if (selectedTopic === null) return true // Show all topics
+          return source.column === selectedTopic
+        })
         .map(([k, source]) => ({
           id: k,
           title: source.title,
@@ -60,7 +68,7 @@ export function SearchBar() {
           name: source.name,
           pinyin: pinyin?.[k as keyof typeof pinyin] ?? "",
         })))
-    , [selectedRegion],
+    , [selectedRegion, selectedTopic],
   )
   const inputRef = useRef<HTMLInputElement | null>(null)
 
@@ -96,27 +104,64 @@ export function SearchBar() {
         autoFocus
         placeholder={t("search.placeholder")}
       />
-      <div className="flex gap-2 px-4 py-2 border-b border-base/10">
-        <span className="text-sm text-neutral-400">
-          {t("search.region")}
-          :
-        </span>
-        <div className="flex gap-2">
-          {(Object.keys(regions) as Region[]).map(region => (
+      <div className="flex flex-col gap-2 px-4 py-2 border-b border-base/10">
+        <div className="flex gap-2 items-center">
+          <span className="text-sm text-neutral-400">
+            {t("search.region")}
+            :
+          </span>
+          <div className="flex gap-2">
+            {(Object.keys(regions) as Region[]).map(region => (
+              <button
+                key={region}
+                type="button"
+                onClick={() => setSelectedRegion(region)}
+                className={$(
+                  "text-sm px-2 py-0.5 rounded transition-all",
+                  selectedRegion === region
+                    ? "bg-primary/20 color-primary font-semibold"
+                    : "hover:bg-primary/10 text-neutral-400",
+                )}
+              >
+                {t(`regions.${region}`)}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="flex gap-2 items-center">
+          <span className="text-sm text-neutral-400">
+            {t("search.topic")}
+            :
+          </span>
+          <div className="flex gap-2 flex-wrap">
             <button
-              key={region}
               type="button"
-              onClick={() => setSelectedRegion(region)}
+              onClick={() => setSelectedTopic(null)}
               className={$(
                 "text-sm px-2 py-0.5 rounded transition-all",
-                selectedRegion === region
+                selectedTopic === null
                   ? "bg-primary/20 color-primary font-semibold"
                   : "hover:bg-primary/10 text-neutral-400",
               )}
             >
-              {t(`regions.${region}`)}
+              {t("search.allTopics")}
             </button>
-          ))}
+            {hiddenColumns.map(topic => (
+              <button
+                key={topic}
+                type="button"
+                onClick={() => setSelectedTopic(topic)}
+                className={$(
+                  "text-sm px-2 py-0.5 rounded transition-all",
+                  selectedTopic === topic
+                    ? "bg-primary/20 color-primary font-semibold"
+                    : "hover:bg-primary/10 text-neutral-400",
+                )}
+              >
+                {t(`columns.${topic}`)}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
       <div className="md:flex pt-2">

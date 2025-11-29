@@ -4,6 +4,7 @@ import type { Update } from "./types"
 import { regionAtom } from "./regionAtom"
 
 export { regionAtom } from "./regionAtom"
+export { topicAtom } from "./topicAtom"
 
 export const focusSourcesAtom = atom((get) => {
   return get(primitiveMetadataAtom).data.focus

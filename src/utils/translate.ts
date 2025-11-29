@@ -115,7 +115,6 @@ export async function translateText(options: TranslationOptions): Promise<string
     })
 
     if (!response.ok) {
-      console.warn(`Translation failed: ${response.status} ${response.statusText}`)
       return text // Return original text on error
     }
 
@@ -126,8 +125,7 @@ export async function translateText(options: TranslationOptions): Promise<string
     translationCache[cacheKey] = translatedText
 
     return translatedText
-  } catch (error) {
-    console.error("Translation error:", error)
+  } catch {
     return text // Return original text on error
   }
 }
