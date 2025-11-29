@@ -1,8 +1,10 @@
-import { fixedColumnIds, regionColumnId } from "@shared/metadata"
+import { fixedColumnIds } from "@shared/metadata"
 import { Link } from "@tanstack/react-router"
 import { useTranslation } from "react-i18next"
+import { useAtomValue } from "jotai"
 import { RegionSelector } from "./region-selector"
 import { currentColumnIDAtom } from "~/atoms"
+import { useSearchBar } from "~/hooks/useSearch"
 
 export function NavBar() {
   const { t } = useTranslation()
@@ -37,22 +39,6 @@ export function NavBar() {
           {t(`columns.${columnId}`)}
         </Link>
       ))}
-      <Link
-        to="/c/$column"
-        params={{ column: regionColumnId }}
-        className={$(
-          "hover:(bg-primary/10 rounded-md) cursor-pointer transition-all flex items-center",
-          currentId === regionColumnId ? "color-primary font-bold" : "",
-        )}
-      >
-        <span className={$(
-          "px-2",
-          currentId === regionColumnId ? "" : "op-70 dark:op-90",
-        )}
-        >
-          {t(`columns.${regionColumnId}`)}
-        </span>
-      </Link>
       <RegionSelector />
     </span>
   )

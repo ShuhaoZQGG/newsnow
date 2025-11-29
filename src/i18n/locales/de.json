@@ -54,7 +54,9 @@
     "language": "Sprache",
     "theme": "Thema",
     "translateContent": "Nachrichteninhalt übersetzen",
-    "autoDetect": "Quellsprache automatisch erkennen"
+    "autoDetect": "Quellsprache automatisch erkennen",
+    "lightMode": "Heller Modus",
+    "darkMode": "Dunkler Modus"
   },
   "menu": {
     "github": "GitHub",

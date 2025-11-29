@@ -3,17 +3,18 @@ import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "~/components/common/language-selector"
 import { RegionMenuItem } from "~/components/common/region-menu-item"
 
-// function ThemeToggle() {
-//   const { isDark, toggleDark } = useDark()
-//   return (
-//     <li onClick={toggleDark} className="cursor-pointer [&_*]:cursor-pointer transition-all">
-//       <span className={$("inline-block", isDark ? "i-ph-moon-stars-duotone" : "i-ph-sun-dim-duotone")} />
-//       <span>
-//         {isDark ? "浅色模式" : "深色模式"}
-//       </span>
-//     </li>
-//   )
-// }
+function ThemeToggle() {
+  const { t } = useTranslation()
+  const { isDark, toggleDark } = useDark()
+  return (
+    <li onClick={toggleDark} className="cursor-pointer [&_*]:cursor-pointer transition-all">
+      <span className={$("inline-block", isDark ? "i-ph-moon-stars-duotone" : "i-ph-sun-dim-duotone")} />
+      <span>
+        {isDark ? t("settings.lightMode") : t("settings.darkMode")}
+      </span>
+    </li>
+  )
+}
 
 export function Menu() {
   const { t } = useTranslation()
@@ -70,7 +71,7 @@ export function Menu() {
                   ))}
               <LanguageSelector />
               <RegionMenuItem />
-              {/* <ThemeToggle /> */}
+              <ThemeToggle />
               <li onClick={() => window.open(Homepage)} className="cursor-pointer [&_*]:cursor-pointer transition-all">
                 <span className="i-ph:github-logo-duotone inline-block" />
                 <span>{t("menu.github")}</span>

@@ -51,7 +51,9 @@
     "language": "语言",
     "theme": "主题",
     "translateContent": "翻译新闻内容",
-    "autoDetect": "自动检测源语言"
+    "autoDetect": "自动检测源语言",
+    "lightMode": "浅色模式",
+    "darkMode": "深色模式"
   },
   "menu": {
     "github": "Github",

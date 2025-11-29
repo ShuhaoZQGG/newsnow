@@ -54,7 +54,9 @@
     "language": "Langue",
     "theme": "Thème",
     "translateContent": "Traduire le contenu des nouvelles",
-    "autoDetect": "Détecter automatiquement la langue source"
+    "autoDetect": "Détecter automatiquement la langue source",
+    "lightMode": "Mode clair",
+    "darkMode": "Mode sombre"
   },
   "menu": {
     "github": "GitHub",
