@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "NewsNow",
+    "description": "Plataforma de agregación de noticias en tiempo real"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "retry": "Reintentar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "search": "Buscar",
+    "clear": "Limpiar"
+  },
+  "search": {
+    "placeholder": "Busca lo que quieras",
+    "noResults": "No se encontraron resultados, puedes ir a Github para enviar un problema",
+    "searching": "Buscando...",
+    "region": "Región",
+    "topic": "Tema",
+    "allTopics": "Todos los temas"
+  },
+  "auth": {
+    "login": "Iniciar sesión con GitHub",
+    "logout": "Cerrar sesión",
+    "loginSuccess": "Inicio de sesión exitoso",
+    "loginFailed": "Fallo al iniciar sesión",
+    "notLoggedIn": "No has iniciado sesión"
+  },
+  "columns": {
+    "focus": "Enfoque",
+    "hottest": "Más popular",
+    "realtime": "Tiempo real",
+    "china": "Nacional",
+    "world": "Internacional",
+    "tech": "Tecnología",
+    "finance": "Finanzas",
+    "uncategorized": "Sin categoría"
+  },
+  "regions": {
+    "global": "Global",
+    "china": "China"
+  },
+  "time": {
+    "justNow": "Justo ahora",
+    "minutesAgo": "Hace {{count}} minuto",
+    "minutesAgo_other": "Hace {{count}} minutos",
+    "hoursAgo": "Hace {{count}} hora",
+    "hoursAgo_other": "Hace {{count}} horas",
+    "daysAgo": "Hace {{count}} día",
+    "daysAgo_other": "Hace {{count}} días",
+    "monthDay": "{{day}}/{{month}}"
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": "Idioma",
+    "theme": "Tema",
+    "translateContent": "Traducir contenido de noticias",
+    "autoDetect": "Detectar automáticamente el idioma de origen",
+    "lightMode": "Modo claro",
+    "darkMode": "Modo oscuro"
+  },
+  "menu": {
+    "github": "GitHub",
+    "settings": "Configuración",
+    "about": "Acerca de"
+  },
+  "translation": {
+    "translating": "Traduciendo...",
+    "translationFailed": "Falló la traducción",
+    "showOriginal": "Mostrar original",
+    "showTranslation": "Mostrar traducción"
+  },
+  "status": {
+    "updated": "Actualizado {{time}}",
+    "fetchFailed": "Error al obtener"
+  }
+}
