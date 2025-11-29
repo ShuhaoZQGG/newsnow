@@ -1,6 +1,17 @@
 import { sources } from "./sources"
 import { typeSafeObjectEntries, typeSafeObjectFromEntries } from "./type.util"
-import type { ColumnID, HiddenColumnID, Metadata, SourceID } from "./types"
+import type { ColumnID, HiddenColumnID, Metadata, Region, SourceID } from "./types"
+
+export const regions: Record<Region, { zh: string, en: string }> = {
+  global: {
+    zh: "全球",
+    en: "Global",
+  },
+  china: {
+    zh: "中国",
+    en: "China",
+  },
+} as const
 
 export const columns = {
   china: {
@@ -26,8 +37,11 @@ export const columns = {
   },
 } as const
 
-export const fixedColumnIds = ["focus", "hottest", "realtime"] as const satisfies Partial<ColumnID>[]
-export const hiddenColumns = Object.keys(columns).filter(id => !fixedColumnIds.includes(id as any)) as HiddenColumnID[]
+export const fixedColumnIds = ["focus", "hottest"] as const satisfies Partial<ColumnID>[]
+export const regionColumnId = "realtime" as const satisfies ColumnID
+// All columns that can be navigated to via URL
+export const navigableColumnIds = [...fixedColumnIds, regionColumnId] as const
+export const hiddenColumns = Object.keys(columns).filter(id => !navigableColumnIds.includes(id as any)) as HiddenColumnID[]
 
 export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntries(columns).map(([k, v]) => {
   switch (k) {
