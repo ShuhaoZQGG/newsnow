@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "~/components/common/language-selector"
+import { RegionMenuItem } from "~/components/common/region-menu-item"
 
 // function ThemeToggle() {
 //   const { isDark, toggleDark } = useDark()
@@ -68,6 +69,7 @@ export function Menu() {
                     </li>
                   ))}
               <LanguageSelector />
+              <RegionMenuItem />
               {/* <ThemeToggle /> */}
               <li onClick={() => window.open(Homepage)} className="cursor-pointer [&_*]:cursor-pointer transition-all">
                 <span className="i-ph:github-logo-duotone inline-block" />

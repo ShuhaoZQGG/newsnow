@@ -1,11 +1,13 @@
 import { Command } from "cmdk"
 import { useMount } from "react-use"
 import { useTranslation } from "react-i18next"
-import type { SourceID } from "@shared/types"
+import type { Region, SourceID } from "@shared/types"
 import { useMemo, useRef, useState } from "react"
 import pinyin from "@shared/pinyin.json"
+import { regions } from "@shared/metadata"
 import { OverlayScrollbar } from "../overlay-scrollbar"
 import { CardWrapper } from "~/components/column/card"
+import { regionAtom } from "~/atoms"
 
 import "./cmdk.css"
 
@@ -40,10 +42,17 @@ function groupByColumn(items: SourceItemProps[]) {
 export function SearchBar() {
   const { t } = useTranslation()
   const { opened, toggle } = useSearchBar()
+  const [selectedRegion, setSelectedRegion] = useAtom(regionAtom)
+
   const sourceItems = useMemo(
     () =>
       groupByColumn(typeSafeObjectEntries(sources)
         .filter(([_, source]) => !source.redirect)
+        // Filter by selected region
+        .filter(([_, source]) => {
+          const sourceRegion = source.region || "global"
+          return sourceRegion === selectedRegion
+        })
         .map(([k, source]) => ({
           id: k,
           title: source.title,
@@ -51,7 +60,7 @@ export function SearchBar() {
           name: source.name,
           pinyin: pinyin?.[k as keyof typeof pinyin] ?? "",
         })))
-    , [],
+    , [selectedRegion],
   )
   const inputRef = useRef<HTMLInputElement | null>(null)
 
@@ -87,6 +96,29 @@ export function SearchBar() {
         autoFocus
         placeholder={t("search.placeholder")}
       />
+      <div className="flex gap-2 px-4 py-2 border-b border-base/10">
+        <span className="text-sm text-neutral-400">
+          {t("search.region")}
+          :
+        </span>
+        <div className="flex gap-2">
+          {(Object.keys(regions) as Region[]).map(region => (
+            <button
+              key={region}
+              type="button"
+              onClick={() => setSelectedRegion(region)}
+              className={$(
+                "text-sm px-2 py-0.5 rounded transition-all",
+                selectedRegion === region
+                  ? "bg-primary/20 color-primary font-semibold"
+                  : "hover:bg-primary/10 text-neutral-400",
+              )}
+            >
+              {regions[region].zh}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className="md:flex pt-2">
         <OverlayScrollbar defer className="overflow-y-auto md:min-w-275px">
           <Command.List>

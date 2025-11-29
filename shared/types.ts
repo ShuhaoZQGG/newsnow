@@ -4,6 +4,8 @@ import type { originSources } from "./pre-sources"
 
 export type Color = "primary" | Exclude<keyof typeof colors, "current" | "inherit" | "transparent" | "black" | "white">
 
+export type Region = "global" | "china"
+
 type ConstSources = typeof originSources
 type MainSourceID = keyof(ConstSources)
 
@@ -71,6 +73,11 @@ export interface Source {
    */
   type?: "hottest" | "realtime"
   column?: HiddenColumnID
+  /**
+   * Region for source filtering
+   * @default "global"
+   */
+  region?: Region
   home?: string
   /**
    * @default false

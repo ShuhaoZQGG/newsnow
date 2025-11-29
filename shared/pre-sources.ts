@@ -12,6 +12,11 @@ const Time = {
   Slow: 60 * 60 * 1000,
 }
 
+// Helper function to detect Chinese characters
+function hasChineseCharacters(text: string): boolean {
+  return /[\u4E00-\u9FFF]/.test(text)
+}
+
 export const originSources = {
   // ===== International / English Sources =====
   "twitter": {
@@ -532,6 +537,10 @@ export function genSources() {
   const _: [SourceID, Source][] = []
 
   Object.entries(originSources).forEach(([id, source]: [any, OriginSource]) => {
+    // Determine region based on Chinese characters in name or title
+    const hasChinese = hasChineseCharacters(source.name) || (source.title && hasChineseCharacters(source.title))
+    const defaultRegion = hasChinese ? "china" : "global"
+
     const parent = {
       name: source.name,
       type: source.type,
@@ -542,9 +551,14 @@ export function genSources() {
       color: source.color ?? "primary",
       interval: source.interval ?? Time.Default,
       disableTranslation: source.disableTranslation,
+      region: source.region ?? defaultRegion,
     }
     if (source.sub && Object.keys(source.sub).length) {
       Object.entries(source.sub).forEach(([subId, subSource], i) => {
+        // Check if subSource has Chinese characters in title
+        const subHasChinese = subSource.title && hasChineseCharacters(subSource.title)
+        const subRegion = source.region ?? (subHasChinese ? "china" : defaultRegion)
+        console.log(subHasChinese, subRegion)
         if (i === 0) {
           _.push([
             id,
@@ -552,10 +566,11 @@ export function genSources() {
               redirect: `${id}-${subId}`,
               ...parent,
               ...subSource,
+              region: subRegion,
             },
           ] as [any, Source])
         }
-        _.push([`${id}-${subId}`, { ...parent, ...subSource }] as [
+        _.push([`${id}-${subId}`, { ...parent, ...subSource, region: subRegion }] as [
           any,
           Source,
         ])
