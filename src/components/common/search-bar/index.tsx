@@ -6,10 +6,15 @@ import type { Region, SourceID } from "@shared/types"
 import { useMemo, useRef, useState } from "react"
 import pinyin from "@shared/pinyin.json"
 import { hiddenColumns, regions } from "@shared/metadata"
+import { sources } from "@shared/sources"
+import { typeSafeObjectEntries } from "@shared/type.util"
+import * as Dialog from "@radix-ui/react-dialog"
 import { OverlayScrollbar } from "../overlay-scrollbar"
 import { CardWrapper } from "~/components/column/card"
 import { regionAtom } from "~/atoms"
 import { topicAtom } from "~/atoms/topicAtom"
+import { useSearchBar } from "~/hooks/useSearch"
+import { useFocusWith } from "~/hooks/useFocus"
 
 import "./cmdk.css"
 
@@ -103,6 +108,9 @@ export function SearchBar() {
         }
       }}
     >
+      <Dialog.Title asChild>
+        <span className="sr-only">{t("common.search")}</span>
+      </Dialog.Title>
       <Command.Input
         ref={inputRef}
         autoFocus
